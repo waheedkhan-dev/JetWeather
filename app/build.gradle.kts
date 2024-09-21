@@ -2,15 +2,16 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hiltAndroid)
+    alias(libs.plugins.androidRoom)
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.wk.composeweather"
+    namespace = "com.wk.jetweather"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.wk.composeweather"
+        applicationId = "com.wk.jetweather"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -54,6 +55,8 @@ android {
     hilt {
         enableAggregatingTask = false
     }
+
+    room { schemaDirectory("$projectDir/schemas") }
 }
 
 dependencies {
@@ -84,6 +87,11 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.converter.gson)
     implementation(libs.okio)
+
+    //Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 
     //Hilt
     implementation(libs.hilt.android)
