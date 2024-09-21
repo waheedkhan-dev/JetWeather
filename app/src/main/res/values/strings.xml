@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JetWeather</string>
+    <string name="_5_days_forecast">5-Days Forecast</string>
 </resources>

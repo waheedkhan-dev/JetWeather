@@ -4,7 +4,7 @@ data class FiveDayForecast(
     val city: City,
     val cnt: Int,
     val cod: String,
-    val list: List<Item0>,
+    val list: List<Days>,
     val message: Int
 ) {
     data class City(
@@ -23,12 +23,12 @@ data class FiveDayForecast(
         )
     }
 
-    data class Item0(
+    data class Days(
         val clouds: Clouds,
         val dt: Int,
         val dt_txt: String,
         val main: Main,
-        val pop: Int,
+        val pop: Double,
         val sys: Sys,
         val visibility: Int,
         val weather: List<Weather>,

@@ -17,4 +17,11 @@ object ApplicationModule {
     fun provideApiKey(): String {
         return "b571f08ae6ca20203f64671baae2cc66"
     }
+
+    @Named("defaultCityName")
+    @Singleton
+    @Provides
+    fun provideDefaultCity(): String {
+        return "London"
+    }
 }

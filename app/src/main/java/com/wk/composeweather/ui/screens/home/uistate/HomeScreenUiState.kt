@@ -1,4 +1,4 @@
-package com.wk.composeweather.ui.screens.uistate
+package com.wk.composeweather.ui.screens.home.uistate
 
 import com.wk.composeweather.data.models.currentWeather.CurrentWeather
 

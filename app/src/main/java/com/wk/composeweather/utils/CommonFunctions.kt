@@ -1,6 +1,7 @@
 package com.wk.composeweather.utils
 
 import com.wk.composeweather.data.models.currentWeather.CurrentWeather
+import com.wk.composeweather.data.models.fiveDayForecast.FiveDayForecast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
