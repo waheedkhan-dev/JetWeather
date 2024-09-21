@@ -1,9 +1,8 @@
-package com.wk.composeweather.data.di
+package com.wk.composeweather.di
 
 import com.wk.composeweather.BuildConfig
 import com.wk.composeweather.data.datasource.remote.JetWeatherApi
-import com.wk.composeweather.utils.interceptor.AuthInterceptor
-import com.wk.composeweather.utils.other.Constants.BASE_URL
+import com.wk.composeweather.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,10 +34,8 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
     ) = OkHttpClient.Builder().apply {
         if(BuildConfig.DEBUG){ addInterceptor(httpLoggingInterceptor) }
-        addInterceptor(authInterceptor)
         connectTimeout(2, TimeUnit.MINUTES)
         readTimeout(2, TimeUnit.MINUTES)
         writeTimeout(2, TimeUnit.MINUTES)
