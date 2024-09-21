@@ -9,5 +9,6 @@ interface JetWeatherApi {
     @GET("weather")
     suspend fun getCurrentWeather(
         @Query("q") cityName: String,
-        @Query("appid") apiKey: String) : Response<CurrentWeather>
+        @Query("appid") apiKey: String,
+        @Query("units") units: String = "metric") : Response<CurrentWeather>
 }

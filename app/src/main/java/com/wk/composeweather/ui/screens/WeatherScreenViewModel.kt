@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.wk.composeweather.data.models.currentWeather.CurrentWeather
 import com.wk.composeweather.data.repositories.WeatherRepositoryImpl
 import com.wk.composeweather.ui.screens.uistate.HomeScreenUiState
+import com.wk.composeweather.utils.CommonFunctions
 import com.wk.composeweather.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,45 +59,7 @@ class WeatherScreenViewModel @Inject constructor(private val weatherRepositoryIm
   private  fun getLocalData() {
         _homeScreenUiState.update {
             HomeScreenUiState.Success(
-                CurrentWeather(
-                    base = "stations",
-                    clouds = CurrentWeather.Clouds(all = 0),
-                    cod = 200,
-                    coord = CurrentWeather.Coord(lat = 33.7695, lon = 72.3611),
-                    dt = 1726899082,
-                    id = 1184249,
-                    main = CurrentWeather.Main(
-                        feels_like = 307.46,
-                        grnd_level = 964,
-                        humidity = 40,
-                        pressure = 1007,
-                        sea_level = 1007,
-                        temp = 306.48,
-                        temp_max = 306.48,
-                        temp_min = 306.48
-                    ),
-                    name = "Attock",
-                    sys = CurrentWeather.Sys(
-                        country = "PK",
-                        sunrise = 1726880280,
-                        sunset = 1726924157
-                    ),
-                    timezone = 18000,
-                    visibility = 10000,
-                    weather = listOf(
-                        CurrentWeather.Weather(
-                            description = "clear sky",
-                            icon = "01d",
-                            id = 800,
-                            main = "Clear"
-                        )
-                    ),
-                    wind = CurrentWeather.Wind(
-                        deg = 127,
-                        gust = 1.43,
-                        speed = 1.4
-                    )
-                )
+                CommonFunctions.getCurrentWeather()
             )
         }
     }

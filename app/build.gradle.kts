@@ -94,4 +94,7 @@ dependencies {
 
     //LeakCanary
     debugImplementation(libs.leakcanary.android)
+
+    //Coil for image loading
+    implementation(libs.coil.compose)
 }
