@@ -1,6 +1,7 @@
 package com.wk.jetweather.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +37,9 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
     ) {
         composable(route = BottomBarScreens.Weather.route) {
             val currentWeatherScreenViewModel: CurrentWeatherScreenViewModel = hiltViewModel()
+            LaunchedEffect(Unit) {
+                currentWeatherScreenViewModel.fetchTodayWeather()
+            }
             val homeScreenUiState =
                 currentWeatherScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
             CurrentWeatherScreen(homeScreenUiState = homeScreenUiState, onFiveDayForecastClick = {

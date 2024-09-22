@@ -21,6 +21,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "APP_KEY", "\"${project.findProperty("APP_KEY")}\"")
     }
 
     buildTypes {
@@ -70,12 +71,27 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Unit testing dependencies
+    testImplementation(libs.kotlinx.coroutines.test.v164)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.core)
+    testImplementation(libs.turbine)
+    testImplementation(libs.junit)
+
+
+    testImplementation(libs.mockk)
+
+    testImplementation(libs.turbine)
+
 
     //Compose Navigation
     implementation(libs.androidx.navigation.compose)

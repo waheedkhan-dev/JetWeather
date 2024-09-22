@@ -3,4 +3,6 @@
     <string name="_5_days_forecast">5-Days Forecast</string>
     <string name="see_5_days_forecast">See 5 Days Forecast</string>
     <string name="weather">Weather</string>
+    <string name="no_weather_data_available">No weather data available</string>
+    <string name="ops_something_went_wrong">Ops Something went wrong</string>
 </resources>

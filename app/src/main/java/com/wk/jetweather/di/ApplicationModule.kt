@@ -1,5 +1,6 @@
 package com.wk.jetweather.di
 
+import com.wk.jetweather.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,13 +16,13 @@ object ApplicationModule {
     @Singleton
     @Provides
     fun provideApiKey(): String {
-        return "b571f08ae6ca20203f64671baae2cc66"
+        return BuildConfig.APP_KEY
     }
 
     @Named("defaultCityName")
     @Singleton
     @Provides
     fun provideDefaultCity(): String {
-        return "Attock"
+        return "United Arab Emirates" // This is a static city name for current weather. In production level application we have to fetch the user current location and fetch the weather for that location
     }
 }

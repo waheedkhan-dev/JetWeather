@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wk.jetweather.data.repositories.WeatherRepositoryImpl
 import com.wk.jetweather.ui.screens.weather.uistate.HomeScreenUiState
-import com.wk.jetweather.utils.CommonFunctions
 import com.wk.jetweather.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,13 +25,7 @@ class CurrentWeatherScreenViewModel @Inject constructor(
         MutableStateFlow<HomeScreenUiState>(HomeScreenUiState.InitialState)
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
-
-    init {
-       // getLocalData()
-         fetchTodayWeather()
-    }
-
-    private fun fetchTodayWeather(cityName: String = defaultCity) {
+    fun fetchTodayWeather(cityName: String = defaultCity) {
         viewModelScope.launch {
             weatherRepositoryImpl.fetchTodayWeather(cityName = cityName).collect { response ->
                 when (response) {
@@ -56,14 +49,6 @@ class CurrentWeatherScreenViewModel @Inject constructor(
                 }
             }
 
-        }
-    }
-
-    private fun getLocalData() {
-        _homeScreenUiState.update {
-            HomeScreenUiState.Success(
-                CommonFunctions.getCurrentWeather()
-            )
         }
     }
 }

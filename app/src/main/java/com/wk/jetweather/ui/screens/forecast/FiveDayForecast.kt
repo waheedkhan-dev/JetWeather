@@ -3,6 +3,7 @@ package com.wk.jetweather.ui.screens.forecast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,13 +15,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -47,6 +53,15 @@ fun FiveDayForecast(
     forecastUiState: ForecastScreenUiState,
     onBackClick: () -> Unit = {}
 ) {
+
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(forecastUiState) {
+        if (forecastUiState is ForecastScreenUiState.Error) {
+            snackBarHostState.showSnackbar(forecastUiState.errorMessage)
+        }
+    }
+
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -73,6 +88,8 @@ fun FiveDayForecast(
             modifier = modifier.shadow(2.dp),
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
         )
+    }, snackbarHost = {
+        SnackbarHost(hostState = snackBarHostState)
     }) { innerPadding ->
         Column(
             modifier = modifier
@@ -82,7 +99,11 @@ fun FiveDayForecast(
             verticalArrangement = Arrangement.Top
         ) {
             when (forecastUiState) {
-                is ForecastScreenUiState.Loading -> {}
+                is ForecastScreenUiState.Loading -> {
+                    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        CircularProgressIndicator()
+                    }
+                }
                 is ForecastScreenUiState.Success -> {
                     val forecastList = forecastUiState.fiveDayFiveDayForecastEntity
                     LazyColumn(
@@ -120,14 +141,17 @@ fun FiveDayForecast(
                                         fontSize = 14.sp,
                                         fontFamily = robotoFamily,
                                         fontWeight = FontWeight.Medium
-                                    ))
+                                    )
+                                )
                                 Spacer(modifier = modifier.weight(1f))
                                 Text(
-                                    text = "${it.tempMax.toInt()}°c / ${it.tempMin.toInt()}°c", style = TextStyle(
+                                    text = "${it.tempMax.toInt()}°c / ${it.tempMin.toInt()}°c",
+                                    style = TextStyle(
                                         fontSize = 14.sp,
                                         fontFamily = robotoFamily,
                                         fontWeight = FontWeight.Medium
-                                    ))
+                                    )
+                                )
 
                             }
                         }
@@ -138,7 +162,13 @@ fun FiveDayForecast(
                 }
 
                 is ForecastScreenUiState.Error -> {
-                    Text(text = forecastUiState.errorMessage)
+                    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        Text(text = stringResource(R.string.ops_something_went_wrong),style = TextStyle(
+                            fontSize = 18.sp,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium
+                        ))
+                    }
                 }
 
                 is ForecastScreenUiState.InitialState -> {}

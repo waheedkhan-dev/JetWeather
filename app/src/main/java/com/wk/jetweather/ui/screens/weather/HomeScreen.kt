@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -23,9 +24,14 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -52,6 +58,7 @@ import com.wk.jetweather.utils.CommonFunctions
 import com.wk.jetweather.utils.CommonFunctions.convertTimestampToUTCFormat
 import com.wk.jetweather.utils.CommonFunctions.windDirection
 import com.wk.jetweather.utils.previewers.CurrentWeatherProvider
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +67,15 @@ fun CurrentWeatherScreen(
     homeScreenUiState: HomeScreenUiState,
     onFiveDayForecastClick: () -> Unit = {}
 ) {
+
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(homeScreenUiState) {
+        if (homeScreenUiState is HomeScreenUiState.Error) {
+            snackBarHostState.showSnackbar(homeScreenUiState.errorMessage)
+        }
+    }
+
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = { Text(stringResource(R.string.app_name),style = TextStyle(
@@ -70,6 +86,8 @@ fun CurrentWeatherScreen(
             modifier = modifier.shadow(2.dp),
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
         )
+    }, snackbarHost = {
+        SnackbarHost(hostState = snackBarHostState)
     }) { innerPadding ->
         Column(
             modifier = modifier
@@ -238,11 +256,15 @@ fun CurrentWeatherScreen(
                     }
                     Spacer(modifier = modifier.weight(1f))
                 }
-
                 is HomeScreenUiState.Error -> {
-                    Text(text = homeScreenUiState.errorMessage)
+                    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                        Text(text = stringResource(R.string.ops_something_went_wrong),style = TextStyle(
+                            fontSize = 18.sp,
+                            fontFamily = robotoFamily,
+                            fontWeight = FontWeight.Medium
+                        ))
+                    }
                 }
-
                 else -> {}
             }
         }
