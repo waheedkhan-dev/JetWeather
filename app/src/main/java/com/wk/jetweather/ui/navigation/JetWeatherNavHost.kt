@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.wk.jetweather.Graph
+import com.wk.jetweather.ui.screens.Graph
 
 @Composable
 fun JetWeatherNavHost(modifier: Modifier = Modifier) {
@@ -18,7 +18,3 @@ fun JetWeatherNavHost(modifier: Modifier = Modifier) {
         composable(route = Graph.MAIN) { MainScreen() }
     }
 }
-
-
-
-

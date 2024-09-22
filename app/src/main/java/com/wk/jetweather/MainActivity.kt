@@ -1,4 +1,4 @@
-package com.wk.jetweather
+package com.wk.jetweather.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,4 +25,3 @@ object Graph {
     const val MAIN = "main_graph"
     const val DETAIL = "detail_graph"
 }
-

@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
+import com.wk.jetweather.ui.theme.robotoFamily
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
@@ -43,45 +44,48 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val bottomBarDestination = bottomBarScreens.any { it.route == currentRoute }
     Scaffold(modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
-        bottomBar = { if (bottomBarDestination) {
-            NavigationBar(
-                windowInsets = WindowInsets.navigationBars,
-                containerColor = NavigationBarDefaults.containerColor,
-                tonalElevation = NavigationBarDefaults.Elevation
-            ) {
+        bottomBar = {
+            if (bottomBarDestination) {
+                NavigationBar(
+                    windowInsets = WindowInsets.navigationBars,
+                    containerColor = NavigationBarDefaults.containerColor,
+                    tonalElevation = NavigationBarDefaults.Elevation
+                ) {
 
-                bottomBarScreens.forEachIndexed { _, screen ->
-                    NavigationBarItem(
-                        label = {
-                            Text(
-                                text = screen.title, style = TextStyle(
-                                    fontWeight = FontWeight.Normal
+                    bottomBarScreens.forEachIndexed { _, screen ->
+                        NavigationBarItem(
+                            label = {
+                                Text(
+                                    text = screen.title, style = TextStyle(
+                                        fontWeight = FontWeight.Normal,
+                                        fontFamily = robotoFamily,
+                                    )
                                 )
-                            )
-                        },
+                            },
 
-                        icon = {
-                            Icon(
-                                modifier = modifier.size(24.dp),
-                                painter = painterResource(id = screen.icon),
-                                contentDescription = screen.route
-                            )
-                        },
+                            icon = {
+                                Icon(
+                                    modifier = modifier.size(24.dp),
+                                    painter = painterResource(id = screen.icon),
+                                    contentDescription = screen.route
+                                )
+                            },
 
-                        selected = currentSelectedScreen == screen,
+                            selected = currentSelectedScreen == screen,
 
-                        alwaysShowLabel = true,
+                            alwaysShowLabel = true,
 
-                        onClick = {
-                            if (currentRoute != screen.route) {
-                                navController.navigateToRootScreen(screen)
+                            onClick = {
+                                if (currentRoute != screen.route) {
+                                    navController.navigateToRootScreen(screen)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
-        } }
-    ) { padding->
+        }
+    ) { padding ->
         Box(
             modifier = Modifier
                 .padding(padding)

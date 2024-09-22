@@ -18,7 +18,8 @@ import javax.inject.Named
 @HiltViewModel
 class CurrentWeatherScreenViewModel @Inject constructor(
     @Named("defaultCityName") private val defaultCity: String,
-    private val weatherRepositoryImpl: WeatherRepositoryImpl) :
+    private val weatherRepositoryImpl: WeatherRepositoryImpl
+) :
     ViewModel() {
 
     private val _homeScreenUiState =
@@ -27,8 +28,8 @@ class CurrentWeatherScreenViewModel @Inject constructor(
 
 
     init {
-        getLocalData()
-      //  fetchTodayWeather()
+       // getLocalData()
+         fetchTodayWeather()
     }
 
     private fun fetchTodayWeather(cityName: String = defaultCity) {
@@ -58,34 +59,7 @@ class CurrentWeatherScreenViewModel @Inject constructor(
         }
     }
 
-    /*private fun fetchFiveDayForecast(cityName: String = defaultCity) {
-        viewModelScope.launch {
-            weatherRepositoryImpl.fetchFiveDayForecast(cityName = cityName).collect { response ->
-                when (response) {
-                    is Resource.Loading -> {
-                        _homeScreenUiState.update {
-                            HomeScreenUiState.Loading
-                        }
-                    }
-
-                    is Resource.Success -> {
-                        _homeScreenUiState.update {
-                            HomeScreenUiState.Success(response.data)
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        _homeScreenUiState.update {
-                            HomeScreenUiState.Error(response.message)
-                        }
-                    }
-                }
-            }
-
-        }
-    }*/
-
-  private  fun getLocalData() {
+    private fun getLocalData() {
         _homeScreenUiState.update {
             HomeScreenUiState.Success(
                 CommonFunctions.getCurrentWeather()

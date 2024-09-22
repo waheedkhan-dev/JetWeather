@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wk.jetweather.R
+import com.wk.jetweather.ui.theme.robotoFamily
 
 @Composable
 fun EnvironmentalConditions(
@@ -36,17 +37,19 @@ fun EnvironmentalConditions(
                 .size(32.dp)
                 .background(shape = CircleShape, color = Color.LightGray)
                 .clip(CircleShape)
-                .padding(8.dp), painter = icon, contentDescription = title, tint = Color.White
+                .padding(8.dp), painter = icon, contentDescription = title, tint = Color.Black
         )
         Column(modifier = modifier.padding(horizontal = 8.dp)) {
             Text(text = title, style = TextStyle(
                 fontWeight = FontWeight.Normal,
+                fontFamily = robotoFamily,
                 fontSize = 12.sp,
                 color = Color.Gray
             ))
             Spacer(modifier = modifier.size(4.dp))
             Text(text = value, style = TextStyle(
                 fontWeight = FontWeight.Medium,
+                fontFamily = robotoFamily,
                 fontSize = 16.sp
             ))
         }

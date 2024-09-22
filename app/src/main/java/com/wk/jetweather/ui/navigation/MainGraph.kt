@@ -9,8 +9,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.wk.jetweather.Graph
+import com.wk.jetweather.ui.screens.Graph
 import com.wk.jetweather.ui.screens.cityweather.CityWeatherScreen
+import com.wk.jetweather.ui.screens.cityweather.CityWeatherScreenViewModel
 import com.wk.jetweather.ui.screens.forecast.FiveDayForecast
 import com.wk.jetweather.ui.screens.forecast.ForecastViewModel
 import com.wk.jetweather.ui.screens.weather.CurrentWeatherScreen
@@ -43,7 +44,12 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = BottomBarScreens.Locations.route) {
-            CityWeatherScreen()
+            val cityWeatherScreenViewModel: CityWeatherScreenViewModel = hiltViewModel()
+            val allWeathers =
+                cityWeatherScreenViewModel.allWeathers.collectAsStateWithLifecycle().value
+            CityWeatherScreen(allWeathers = allWeathers, onSearchAction = {
+                cityWeatherScreenViewModel.searchWeather(it)
+            })
         }
 
     }

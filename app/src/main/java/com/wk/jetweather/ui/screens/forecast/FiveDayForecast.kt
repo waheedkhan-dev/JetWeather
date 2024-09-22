@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.wk.jetweather.R
 import com.wk.jetweather.ui.screens.forecast.uistate.ForecastScreenUiState
+import com.wk.jetweather.ui.theme.robotoFamily
 import com.wk.jetweather.utils.CommonFunctions.convertTimestampToDayName
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,8 +52,9 @@ fun FiveDayForecast(
             title = {
                 Text(
                     text = stringResource(R.string._5_days_forecast),
-                    style = androidx.compose.ui.text.TextStyle(
+                    style = TextStyle(
                         fontSize = 18.sp,
+                        fontFamily = robotoFamily,
                         fontWeight = FontWeight.Medium
                     ), modifier = modifier.padding(horizontal = 8.dp)
                 )
@@ -82,7 +84,7 @@ fun FiveDayForecast(
             when (forecastUiState) {
                 is ForecastScreenUiState.Loading -> {}
                 is ForecastScreenUiState.Success -> {
-                    val forecastList = forecastUiState.fiveDayForecast
+                    val forecastList = forecastUiState.fiveDayFiveDayForecastEntity
                     LazyColumn(
                         modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -98,6 +100,7 @@ fun FiveDayForecast(
                                 Text(
                                     text = convertTimestampToDayName(it.id), style = TextStyle(
                                         fontSize = 14.sp,
+                                        fontFamily = robotoFamily,
                                         fontWeight = FontWeight.Medium
                                     )
                                 )
@@ -115,12 +118,14 @@ fun FiveDayForecast(
                                 Text(
                                     text = it.main, style = TextStyle(
                                         fontSize = 14.sp,
+                                        fontFamily = robotoFamily,
                                         fontWeight = FontWeight.Medium
                                     ))
                                 Spacer(modifier = modifier.weight(1f))
                                 Text(
                                     text = "${it.tempMax.toInt()}°c / ${it.tempMin.toInt()}°c", style = TextStyle(
                                         fontSize = 14.sp,
+                                        fontFamily = robotoFamily,
                                         fontWeight = FontWeight.Medium
                                     ))
 

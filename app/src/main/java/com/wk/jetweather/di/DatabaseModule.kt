@@ -3,6 +3,7 @@ package com.wk.jetweather.di
 import android.content.Context
 import androidx.room.Room
 import com.wk.jetweather.data.datasource.local.dao.ForecastDao
+import com.wk.jetweather.data.datasource.local.dao.WeatherDao
 import com.wk.jetweather.data.datasource.local.database.JetWeatherAppDatabase
 import dagger.Module
 import dagger.Provides
@@ -30,6 +31,12 @@ object DatabaseModule {
     @Provides
     fun provideForecastDao(jetWeatherAppDatabase: JetWeatherAppDatabase): ForecastDao {
         return jetWeatherAppDatabase.forecastDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrentWeatherDao(jetWeatherAppDatabase: JetWeatherAppDatabase): WeatherDao {
+        return jetWeatherAppDatabase.weatherDao()
     }
 
 }

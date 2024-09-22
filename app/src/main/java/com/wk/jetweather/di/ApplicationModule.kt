@@ -22,6 +22,6 @@ object ApplicationModule {
     @Singleton
     @Provides
     fun provideDefaultCity(): String {
-        return "London"
+        return "Attock"
     }
 }

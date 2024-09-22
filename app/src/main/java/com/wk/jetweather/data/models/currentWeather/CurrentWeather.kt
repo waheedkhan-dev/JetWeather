@@ -1,5 +1,7 @@
 package com.wk.jetweather.data.models.currentWeather
 
+import com.wk.jetweather.data.datasource.local.entities.CurrentWeatherEntity
+
 data class CurrentWeather(
     val base: String,
     val clouds: Clouds,
@@ -52,5 +54,27 @@ data class CurrentWeather(
         val deg: Int,
         val gust: Double,
         val speed: Double
+    )
+}
+
+fun CurrentWeather.toWeather() : CurrentWeatherEntity {
+    return CurrentWeatherEntity(
+        id = this.id,
+        cityName = this.name,
+        dt = this.dt.toLong(),
+        main = this.weather.first().main,
+        description = this.weather.first().description,
+        icon = this.weather.first().icon,
+        feelsLike = this.main.feels_like,
+        grndLevel = this.main.grnd_level,
+        humidity = this.main.humidity,
+        pressure = this.main.pressure,
+        seaLevel = this.main.sea_level,
+        temp = this.main.temp,
+        tempMax = this.main.temp_max,
+        tempMin = this.main.temp_min,
+        deg = this.wind.deg,
+        gust = this.wind.gust,
+        speed = this.wind.speed
     )
 }

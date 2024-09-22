@@ -42,7 +42,7 @@ class ForecastViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         _forecastUiState.update {
-                            ForecastScreenUiState.Success(fiveDayForecast = response.data)
+                            ForecastScreenUiState.Success(fiveDayFiveDayForecastEntity = response.data)
                         }
                     }
 

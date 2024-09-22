@@ -1,5 +1,6 @@
 package com.wk.jetweather.utils
 
+import com.wk.jetweather.data.datasource.local.entities.CurrentWeatherEntity
 import com.wk.jetweather.data.models.currentWeather.CurrentWeather
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -33,45 +34,25 @@ object CommonFunctions {
     }
 
 
-    fun getCurrentWeather() : CurrentWeather {
-        return CurrentWeather(
-            base = "stations",
-            clouds = CurrentWeather.Clouds(all = 0),
-            cod = 200,
-            coord = CurrentWeather.Coord(lat = 33.7695, lon = 72.3611),
+    fun getCurrentWeather() : CurrentWeatherEntity {
+        return CurrentWeatherEntity(
             dt = 1726899082,
             id = 1184249,
-            main = CurrentWeather.Main(
-                feels_like = 35.86,
-                grnd_level = 962,
-                humidity = 32,
-                pressure = 1006,
-                sea_level = 1006,
-                temp = 35.49,
-                temp_max = 35.49,
-                temp_min = 35.49
-            ),
-            name = "Attock",
-            sys = CurrentWeather.Sys(
-                country = "PK",
-                sunrise = 1726880280,
-                sunset = 1726924157
-            ),
-            timezone = 18000,
-            visibility = 10000,
-            weather = listOf(
-                CurrentWeather.Weather(
-                    description = "clear sky",
-                    icon = "01d",
-                    id = 800,
-                    main = "Clear"
-                )
-            ),
-            wind = CurrentWeather.Wind(
-                deg = 127,
-                gust = 1.43,
-                speed = 1.4
-            )
+            feelsLike = 35.86,
+            grndLevel = 962,
+            humidity = 32,
+            pressure = 1006,
+            seaLevel = 1006,
+            temp = 35.49,
+            tempMax = 35.49,
+            tempMin = 35.49,
+            main = "Clear",
+            description = "clear sky",
+            icon = "01d",
+            deg = 127,
+            gust = 1.43,
+            speed = 1.4,
+            cityName = "Attock"
         )
     }
 
