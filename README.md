@@ -17,6 +17,11 @@
 1. Current Weather: The app fetches the current weather using an API and displays it on the home screen.
 2. 5-Day Forecast: The app fetches weather data for the next 5 days and presents it in a list format.
 3. Search by City: Users can search for current weather conditions by typing in the name of a city.
+🖼️ Screenshots
+<img width="409" alt="Screenshot 2024-09-22 at 9 50 27 PM" src="https://github.com/user-attachments/assets/21986573-338e-4f4a-aec5-66d4d9038cd5">
+<img width="366" alt="Screenshot 2024-09-22 at 9 50 54 PM" src="https://github.com/user-attachments/assets/ef3744c6-faa1-4c9d-9910-464c321e4d0f">
+<img width="378" alt="Screenshot 2024-09-22 at 9 50 37 PM" src="https://github.com/user-attachments/assets/7ff4c67e-7a86-4261-9e02-a7adcd5cbd99">
+
 # 🚀 Setup Instructions
 1. Clone the repository.
 2. Open the project in Android Studio.
