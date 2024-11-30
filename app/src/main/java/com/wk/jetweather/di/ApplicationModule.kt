@@ -23,6 +23,6 @@ object ApplicationModule {
     @Singleton
     @Provides
     fun provideDefaultCity(): String {
-        return "United Arab Emirates" // This is a static city name for current weather. In production level application we have to fetch the user current location and fetch the weather for that location
+        return "Attock" // This is a static city name for current weather. In production level application we have to fetch the user current location and get weather on base of location
     }
 }

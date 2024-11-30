@@ -34,7 +34,7 @@ import com.wk.jetweather.utils.previewers.CurrentWeatherProvider
 
 @Composable
 fun CityWeatherScreen(modifier: Modifier = Modifier, allWeathers: List<CurrentWeatherEntity>,onSearchAction: (String) -> Unit = {}) {
-    val snackBarHostState = remember { SnackbarHostState() }
+ /*   val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     LaunchedEffect(allWeathers) {
         if (allWeathers.isEmpty()) {
@@ -83,7 +83,7 @@ fun CityWeatherScreen(modifier: Modifier = Modifier, allWeathers: List<CurrentWe
             }
 
         }
-    }
+    }*/
 
 }
 

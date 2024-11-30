@@ -30,7 +30,8 @@ class WeatherRepositoryImpl @Inject constructor(
     ): Flow<Resource<CurrentWeatherEntity>> {
         return flow {
             try {
-                // Check the database for cached weather data
+                emit(Resource.Loading)
+                /*// Check the database for cached weather data
                 val currentWeather = weatherDao.getCurrentWeatherByCity(city = cityName)
 
 
@@ -40,7 +41,7 @@ class WeatherRepositoryImpl @Inject constructor(
                 } else {
                     // Emit loading state if no data is available in the database
                     emit(Resource.Loading)
-                }
+                }*/
                 val response = jetWeatherApi.fetchTodayWeather(cityName = cityName, apiKey = apiKey)
                 if (response.isSuccessful) {
                     response.body()?.let {

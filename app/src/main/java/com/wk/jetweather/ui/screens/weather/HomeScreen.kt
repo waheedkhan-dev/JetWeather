@@ -237,7 +237,7 @@ fun CurrentWeatherScreen(
                         )
                     }
                     Spacer(modifier = modifier.weight(1f))
-                    ElevatedButton(
+                   /* ElevatedButton(
                         modifier = modifier
                             .padding(vertical = 12.dp)
                             .align(alignment = Alignment.CenterHorizontally),
@@ -253,7 +253,7 @@ fun CurrentWeatherScreen(
                                 fontWeight = FontWeight.Medium
                             )
                         )
-                    }
+                    }*/
                     Spacer(modifier = modifier.weight(1f))
                 }
                 is HomeScreenUiState.Error -> {
