@@ -29,6 +29,7 @@ roomRuntime = "2.6.1"
 timber = "5.0.1"
 junitJupiter = "5.8.1"
 turbine = "0.12.1"
+playServicesLocation = "21.3.0"
 
 
 [libraries]
@@ -70,6 +71,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

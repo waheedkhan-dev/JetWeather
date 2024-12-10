@@ -1,5 +1,8 @@
 package com.wk.jetweather.ui.navigation
 
+import android.app.Activity.RESULT_OK
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -10,7 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.wk.jetweather.ui.screens.Graph
+import com.wk.jetweather.ui.screens.main.Graph
 import com.wk.jetweather.ui.screens.cityweather.CityWeatherScreen
 import com.wk.jetweather.ui.screens.cityweather.CityWeatherScreenViewModel
 import com.wk.jetweather.ui.screens.forecast.FiveDayForecast
@@ -36,15 +39,41 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
         startDestination = BottomBarScreens.Weather.route
     ) {
         composable(route = BottomBarScreens.Weather.route) {
+
             val currentWeatherScreenViewModel: CurrentWeatherScreenViewModel = hiltViewModel()
-            LaunchedEffect(Unit) {
-                currentWeatherScreenViewModel.fetchTodayWeather()
+            val context = navHostController.context
+
+            val requestLocationPermissionLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.StartIntentSenderForResult()
+            ) { activityResult ->
+                if (activityResult.resultCode == RESULT_OK) {
+                    currentWeatherScreenViewModel.fetchTodayWeather()
+                }
             }
+
+            val isLocationEnabled =
+                currentWeatherScreenViewModel.isLocationEnabled.collectAsStateWithLifecycle().value
+
+            LaunchedEffect(key1 = isLocationEnabled) {
+                if (isLocationEnabled) {
+                    currentWeatherScreenViewModel.fetchTodayWeather()
+                }else{
+                    currentWeatherScreenViewModel.enableLocationRequest(context) {
+                        requestLocationPermissionLauncher.launch(it)
+                    }
+                }
+            }
+
             val homeScreenUiState =
                 currentWeatherScreenViewModel.homeScreenUiState.collectAsStateWithLifecycle().value
-            CurrentWeatherScreen(homeScreenUiState = homeScreenUiState, onFiveDayForecastClick = {
-                navHostController.navigate(DetailDestinations.FiveDayForecast.route)
-            })
+
+            CurrentWeatherScreen(
+                homeScreenUiState = homeScreenUiState,
+                onFiveDayForecastClick = {
+                    navHostController.navigate(DetailDestinations.FiveDayForecast.route)
+                }
+            )
+
         }
 
         composable(route = BottomBarScreens.Locations.route) {

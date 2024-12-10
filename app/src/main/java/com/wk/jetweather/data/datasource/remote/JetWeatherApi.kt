@@ -7,6 +7,14 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface JetWeatherApi {
+
+    @GET("weather")
+    suspend fun fetchTodayWeatherByLatLon(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String,
+        @Query("units") units: String = "metric") : Response<CurrentWeather>
+
     @GET("weather")
     suspend fun fetchTodayWeather(
         @Query("q") cityName: String,

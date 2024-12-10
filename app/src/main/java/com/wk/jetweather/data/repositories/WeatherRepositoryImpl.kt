@@ -5,13 +5,16 @@ import com.wk.jetweather.data.datasource.local.dao.WeatherDao
 import com.wk.jetweather.data.datasource.local.entities.CurrentWeatherEntity
 import com.wk.jetweather.data.datasource.local.entities.FiveDayForecastEntity
 import com.wk.jetweather.data.datasource.remote.JetWeatherApi
+import com.wk.jetweather.data.models.currentWeather.CurrentWeather
 import com.wk.jetweather.data.models.currentWeather.toWeather
 import com.wk.jetweather.data.models.fiveDayForecast.toForecastList
 import com.wk.jetweather.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.io.IOException
@@ -65,6 +68,48 @@ class WeatherRepositoryImpl @Inject constructor(
 
         }.flowOn(IO)
     }
+
+    override suspend fun fetchTodayWeatherByLatLon(
+        lat: Double,
+        lon: Double
+    ): Flow<Resource<CurrentWeather>> = flow {
+        emit(Resource.Loading)
+        try {
+            val response = jetWeatherApi.fetchTodayWeatherByLatLon(
+                lat = lat,
+                lon = lon,
+                apiKey = apiKey
+            )
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    emit(Resource.Success(body))
+                } else {
+                    emit(Resource.Error("Empty response body"))
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val errorMessage = if (errorBody != null) {
+                    try {
+                        val jObjError = JSONObject(errorBody)
+                        val code = jObjError.optString("cod", "Unknown")
+                        val message = jObjError.optString("message", "Unknown error")
+                        "$code: $message"
+                    } catch (ex: JSONException) {
+                        "Failed to parse error response"
+                    }
+                } else {
+                    "Unknown error occurred"
+                }
+                emit(Resource.Error(errorMessage))
+            }
+        } catch (ex: IOException) {
+            emit(Resource.Error("No internet connection"))
+        } catch (ex: HttpException) {
+            emit(Resource.Error("Something went wrong!"))
+        }
+    }.flowOn(IO)
 
     override suspend fun fetchFiveDayForecast(
         cityName: String
