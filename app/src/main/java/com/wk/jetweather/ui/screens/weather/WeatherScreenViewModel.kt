@@ -53,7 +53,6 @@ class CurrentWeatherScreenViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     fun fetchTodayWeather() {
         viewModelScope.launch {
-            _homeScreenUiState.update { HomeScreenUiState.Loading }
             locationProvider.locationFlow()
                 .flatMapLatest { location ->
                     weatherRepositoryImpl.fetchTodayWeatherByLatLon(
