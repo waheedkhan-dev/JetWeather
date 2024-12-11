@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface JetWeatherApi {
 
     @GET("weather")
-    suspend fun fetchTodayWeatherByLatLon(
+    suspend fun fetchCurrentWeatherByLatLon(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
         @Query("appid") apiKey: String,

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -31,7 +30,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -54,11 +52,9 @@ import com.wk.jetweather.ui.components.EnvironmentalConditions
 import com.wk.jetweather.ui.screens.weather.uistate.HomeScreenUiState
 import com.wk.jetweather.ui.theme.JetWeatherTheme
 import com.wk.jetweather.ui.theme.robotoFamily
-import com.wk.jetweather.utils.CommonFunctions
 import com.wk.jetweather.utils.CommonFunctions.convertTimestampToUTCFormat
 import com.wk.jetweather.utils.CommonFunctions.windDirection
 import com.wk.jetweather.utils.previewers.CurrentWeatherProvider
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

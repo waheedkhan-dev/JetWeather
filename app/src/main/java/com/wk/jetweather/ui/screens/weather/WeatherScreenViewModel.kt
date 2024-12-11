@@ -14,6 +14,8 @@ import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.Task
 import com.wk.jetweather.data.models.currentWeather.toWeather
+import com.wk.jetweather.data.repositories.DataStoreRepoImpl
+import com.wk.jetweather.data.repositories.DataStoreRepository
 import com.wk.jetweather.data.repositories.WeatherRepositoryImpl
 import com.wk.jetweather.ui.screens.weather.uistate.HomeScreenUiState
 import com.wk.jetweather.utils.Resource
@@ -24,9 +26,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Named
@@ -37,9 +41,14 @@ private const val TAG = "WeatherScreenViewModel"
 class CurrentWeatherScreenViewModel @Inject constructor(
     locationHelper: LocationHelper,
     private val weatherRepositoryImpl: WeatherRepositoryImpl,
+    private val jetWeatherDataStoreRepo: DataStoreRepoImpl,
     private val locationProvider: LocationProvider
 ) :
     ViewModel() {
+
+    private val _showCityNameDialog = MutableStateFlow(false)
+    val showCityNameDialog: StateFlow<Boolean> = _showCityNameDialog
+
 
     private val _isLocationEnabled = MutableStateFlow(locationHelper.isConnected())
     val isLocationEnabled: StateFlow<Boolean> = _isLocationEnabled.asStateFlow()
@@ -49,13 +58,14 @@ class CurrentWeatherScreenViewModel @Inject constructor(
         MutableStateFlow<HomeScreenUiState>(HomeScreenUiState.InitialState)
     val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
+    val lastEnteredCityName = runBlocking {  jetWeatherDataStoreRepo.getLastEnteredCityName().first() }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun fetchTodayWeather() {
+    fun fetchCurrentWeather() {
         viewModelScope.launch {
             locationProvider.locationFlow()
                 .flatMapLatest { location ->
-                    weatherRepositoryImpl.fetchTodayWeatherByLatLon(
+                    weatherRepositoryImpl.fetchCurrentWeatherByLatLon(
                         lat = location.latitude,
                         lon = location.longitude
                     )
@@ -72,6 +82,35 @@ class CurrentWeatherScreenViewModel @Inject constructor(
         }
     }
 
+    fun fetchCurrentWeatherByCityName(cityName: String) {
+        viewModelScope.launch {
+            weatherRepositoryImpl.fetchCurrentWeatherByCityName(cityName = cityName).collect {
+                    response ->
+                _homeScreenUiState.update {
+                    when (response) {
+                        is Resource.Loading -> HomeScreenUiState.Loading
+                        is Resource.Success -> HomeScreenUiState.Success(response.data)
+                        is Resource.Error -> HomeScreenUiState.Error(response.message)
+                    }
+                }
+            }
+
+        }
+    }
+
+
+    fun onCityNameDialogOpen() {
+        _showCityNameDialog.value = true
+    }
+
+   /* fun onCityNameEntered(name: String) {
+        _cityName.value = name
+        _showCityNameDialog.value = false
+    }*/
+
+    fun onCityNameDialogDismiss() {
+        _showCityNameDialog.value = false
+    }
 
     fun enableLocationRequest(
         context: Context,

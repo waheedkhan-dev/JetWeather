@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface WeatherRepository {
 
-    suspend fun fetchTodayWeather(cityName: String): Flow<Resource<CurrentWeatherEntity>>
-    suspend fun fetchTodayWeatherByLatLon(lat: Double, lon: Double): Flow<Resource<CurrentWeather>>
+    suspend fun fetchCurrentWeatherByCityName(cityName: String): Flow<Resource<CurrentWeatherEntity>>
+    suspend fun fetchCurrentWeatherByLatLon(lat: Double, lon: Double): Flow<Resource<CurrentWeather>>
     suspend fun fetchFiveDayForecast(cityName: String): Flow<Resource<List<FiveDayForecastEntity>>>
     suspend fun getAllWeathersFromDB(): Flow<List<CurrentWeatherEntity>>
 

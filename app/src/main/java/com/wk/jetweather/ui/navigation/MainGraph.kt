@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.wk.jetweather.ui.components.CityNameDialog
 import com.wk.jetweather.ui.screens.main.Graph
 import com.wk.jetweather.ui.screens.cityweather.CityWeatherScreen
 import com.wk.jetweather.ui.screens.cityweather.CityWeatherScreenViewModel
@@ -41,22 +42,33 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
         composable(route = BottomBarScreens.Weather.route) {
 
             val currentWeatherScreenViewModel: CurrentWeatherScreenViewModel = hiltViewModel()
+            val lastEnteredCityName = currentWeatherScreenViewModel.lastEnteredCityName
             val context = navHostController.context
 
             val requestLocationPermissionLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.StartIntentSenderForResult()
             ) { activityResult ->
                 if (activityResult.resultCode == RESULT_OK) {
-                    currentWeatherScreenViewModel.fetchTodayWeather()
+                    currentWeatherScreenViewModel.fetchCurrentWeather()
+                } else {
+                    // show Dialog to enter city name manually
+                    if(lastEnteredCityName.isNotEmpty()){
+                        currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(lastEnteredCityName)
+                    }else {
+                        currentWeatherScreenViewModel.onCityNameDialogOpen()
+                    }
+
                 }
             }
 
+            val showCityNameDialog = currentWeatherScreenViewModel.showCityNameDialog.collectAsStateWithLifecycle().value
             val isLocationEnabled =
                 currentWeatherScreenViewModel.isLocationEnabled.collectAsStateWithLifecycle().value
 
+
             LaunchedEffect(key1 = isLocationEnabled) {
                 if (isLocationEnabled) {
-                    currentWeatherScreenViewModel.fetchTodayWeather()
+                    currentWeatherScreenViewModel.fetchCurrentWeather()
                 }else{
                     currentWeatherScreenViewModel.enableLocationRequest(context) {
                         requestLocationPermissionLauncher.launch(it)
@@ -73,6 +85,15 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
                     navHostController.navigate(DetailDestinations.FiveDayForecast.route)
                 }
             )
+
+            if(showCityNameDialog){
+                CityNameDialog(onDismiss = {
+                    currentWeatherScreenViewModel.onCityNameDialogDismiss()
+                }, onCityEntered = {
+                    currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(it)
+                })
+            }
+
 
         }
 

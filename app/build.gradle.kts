@@ -87,10 +87,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.core)
     testImplementation(libs.turbine)
     testImplementation(libs.junit)
-
-
     testImplementation(libs.mockk)
-
     testImplementation(libs.turbine)
 
 
@@ -122,4 +119,7 @@ dependencies {
 
     //Coil for image loading
     implementation(libs.coil.compose)
+
+    //DataStore
+    implementation(libs.androidx.datastore.preferences)
 }
