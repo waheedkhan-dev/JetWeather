@@ -46,8 +46,7 @@ class CurrentWeatherScreenViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private val _showCityNameDialog = MutableStateFlow(false)
-    val showCityNameDialog: StateFlow<Boolean> = _showCityNameDialog
+
 
 
     private val _isLocationEnabled = MutableStateFlow(locationHelper.isConnected())
@@ -99,22 +98,18 @@ class CurrentWeatherScreenViewModel @Inject constructor(
     }
 
 
-    fun onCityNameDialogOpen() {
-        _showCityNameDialog.value = true
-    }
+
 
    /* fun onCityNameEntered(name: String) {
         _cityName.value = name
         _showCityNameDialog.value = false
     }*/
 
-    fun onCityNameDialogDismiss() {
-        _showCityNameDialog.value = false
-    }
+
 
     fun enableLocationRequest(
         context: Context,
-        makeRequest: (intentSenderRequest: IntentSenderRequest) -> Unit //Lambda to call when locations are off.
+        makeRequest: (intentSenderRequest: IntentSenderRequest) -> Unit // Lambda to call when locations are off.
     ) {
         val locationRequest = createLocationRequest()
 
@@ -135,7 +130,7 @@ class CurrentWeatherScreenViewModel @Inject constructor(
                     val intentSenderRequest =
                         IntentSenderRequest.Builder(exception.resolution)
                             .build()//Create the request prompt
-                    makeRequest(intentSenderRequest)//Make the request from UI
+                    makeRequest(intentSenderRequest)// Make the request from UI
                 } catch (sendEx: IntentSender.SendIntentException) {
                     Timber.tag(TAG).i(sendEx.toString())
                     // Ignore the error.

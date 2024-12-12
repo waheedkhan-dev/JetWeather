@@ -5,7 +5,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.util.fastCbrt
+
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -21,6 +27,9 @@ import com.wk.jetweather.ui.screens.forecast.FiveDayForecast
 import com.wk.jetweather.ui.screens.forecast.ForecastViewModel
 import com.wk.jetweather.ui.screens.weather.CurrentWeatherScreen
 import com.wk.jetweather.ui.screens.weather.CurrentWeatherScreenViewModel
+import com.wk.jetweather.utils.CommonFunctions
+import com.wk.jetweather.utils.CommonFunctions.showEnableLocationDialog
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun MainGraph(modifier: Modifier = Modifier, navHostController: NavHostController) {
@@ -41,9 +50,14 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
     ) {
         composable(route = BottomBarScreens.Weather.route) {
 
+            val showEnableLocationDialog = rememberSaveable { mutableStateOf(false) }
             val currentWeatherScreenViewModel: CurrentWeatherScreenViewModel = hiltViewModel()
             val lastEnteredCityName = currentWeatherScreenViewModel.lastEnteredCityName
             val context = navHostController.context
+
+            val locationPermissionGranted =
+                context.checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        android.content.pm.PackageManager.PERMISSION_GRANTED
 
             val requestLocationPermissionLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.StartIntentSenderForResult()
@@ -51,27 +65,36 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
                 if (activityResult.resultCode == RESULT_OK) {
                     currentWeatherScreenViewModel.fetchCurrentWeather()
                 } else {
-                    // show Dialog to enter city name manually
-                    if(lastEnteredCityName.isNotEmpty()){
-                        currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(lastEnteredCityName)
-                    }else {
-                        currentWeatherScreenViewModel.onCityNameDialogOpen()
+
+                    if (lastEnteredCityName.isNotEmpty()) {
+                        currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(
+                            lastEnteredCityName
+                        )
+                    } else {
+                        // show information dialog why location is required
+                        showEnableLocationDialog.value = true
                     }
 
                 }
             }
 
-            val showCityNameDialog = currentWeatherScreenViewModel.showCityNameDialog.collectAsStateWithLifecycle().value
+
             val isLocationEnabled =
-                currentWeatherScreenViewModel.isLocationEnabled.collectAsStateWithLifecycle().value
+                currentWeatherScreenViewModel.isLocationEnabled.collectAsState().value
 
 
-            LaunchedEffect(key1 = isLocationEnabled) {
-                if (isLocationEnabled) {
+            LaunchedEffect(key1 = isLocationEnabled, key2 = locationPermissionGranted) {
+                if (isLocationEnabled && locationPermissionGranted) {
                     currentWeatherScreenViewModel.fetchCurrentWeather()
-                }else{
-                    currentWeatherScreenViewModel.enableLocationRequest(context) {
-                        requestLocationPermissionLauncher.launch(it)
+                } else {
+                    if (locationPermissionGranted && lastEnteredCityName.isEmpty()) {
+                        currentWeatherScreenViewModel.enableLocationRequest(context) {
+                            requestLocationPermissionLauncher.launch(it)
+                        }
+                    } else {
+                        currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(
+                            lastEnteredCityName
+                        )
                     }
                 }
             }
@@ -86,14 +109,14 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
                 }
             )
 
-            if(showCityNameDialog){
-                CityNameDialog(onDismiss = {
-                    currentWeatherScreenViewModel.onCityNameDialogDismiss()
-                }, onCityEntered = {
-                    currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(it)
+            if(showEnableLocationDialog.value){
+                showEnableLocationDialog(context, enableLocationRequest = {
+                    currentWeatherScreenViewModel.enableLocationRequest(context) {
+                        requestLocationPermissionLauncher.launch(it)
+                        showEnableLocationDialog.value = false
+                    }
                 })
             }
-
 
         }
 

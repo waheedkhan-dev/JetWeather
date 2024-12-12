@@ -1,5 +1,10 @@
 package com.wk.jetweather.utils
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import com.wk.jetweather.data.datasource.local.entities.CurrentWeatherEntity
 import com.wk.jetweather.data.models.currentWeather.CurrentWeather
 import java.text.SimpleDateFormat
@@ -34,7 +39,7 @@ object CommonFunctions {
     }
 
 
-    fun getCurrentWeather() : CurrentWeatherEntity {
+    fun getCurrentWeather(): CurrentWeatherEntity {
         return CurrentWeatherEntity(
             dt = 1726899082,
             id = 1184249,
@@ -68,5 +73,44 @@ object CommonFunctions {
             degrees < 337.5 -> "NW"
             else -> "N" // Fallback, should not reach here
         }
+    }
+
+    fun showPermissionDialog(context: Context, showCityNameDialog: () -> Unit) {
+        AlertDialog.Builder(context)
+            .setTitle("Go to Settings and Enable Location Permission")
+            .setMessage(
+                "We need access to your location to provide accurate weather updates for your current location. " +
+                        "Without this permission, the app cannot show weather information based on your location."
+            )
+            .setCancelable(false)
+            .setPositiveButton("Allow") { _, _ ->
+                // Navigate to app settings
+                openAppSettings(context = context)
+            }.setNegativeButton("Don't Allow") { dialog, _ ->
+                dialog.dismiss()
+                showCityNameDialog()
+            }.show()
+
+    }
+
+    private fun openAppSettings(context: Context) {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", context.packageName, null)
+        )
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
+
+
+    fun showEnableLocationDialog(context: Context, enableLocationRequest: () -> Unit) {
+        AlertDialog.Builder(context)
+            .setTitle("Location Required")
+            .setMessage("Please enable location services or enter your city name manually.")
+            .setPositiveButton("Enable Location") { _, _ ->
+                enableLocationRequest()
+            }
+            .setCancelable(false)
+            .show()
     }
 }

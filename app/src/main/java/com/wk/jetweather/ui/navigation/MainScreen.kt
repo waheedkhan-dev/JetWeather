@@ -32,7 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.wk.jetweather.ui.theme.robotoFamily
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier,locationPermissionGranted : Boolean) {
+fun MainScreen(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val currentSelectedScreen by navController.currentScreenAsState()
     val currentRoute by navController.currentRouteAsState()
@@ -45,7 +45,7 @@ fun MainScreen(modifier: Modifier = Modifier,locationPermissionGranted : Boolean
     Scaffold(modifier = modifier.fillMaxSize(),
         containerColor = Color.White,
         bottomBar = {
-            if (bottomBarDestination && locationPermissionGranted) {
+            if (bottomBarDestination) {
                 NavigationBar(
                     windowInsets = WindowInsets.navigationBars,
                     containerColor = NavigationBarDefaults.containerColor,
@@ -86,15 +86,13 @@ fun MainScreen(modifier: Modifier = Modifier,locationPermissionGranted : Boolean
             }
         }
     ) { padding ->
-        if(locationPermissionGranted) {
-            Box(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
+        Box(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
 
-            ) {
-                MainGraph(navHostController = navController)
-            }
+        ) {
+            MainGraph(navHostController = navController)
         }
 
     }

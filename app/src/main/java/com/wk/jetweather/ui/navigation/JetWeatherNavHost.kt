@@ -8,13 +8,13 @@ import androidx.navigation.compose.rememberNavController
 import com.wk.jetweather.ui.screens.main.Graph
 
 @Composable
-fun JetWeatherNavHost(modifier: Modifier = Modifier, locationPermissionGranted: Boolean) {
+fun JetWeatherNavHost(modifier: Modifier = Modifier) {
 
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Graph.MAIN
     ) {
-        composable(route = Graph.MAIN) { MainScreen(locationPermissionGranted = locationPermissionGranted) }
+        composable(route = Graph.MAIN) { MainScreen() }
     }
 }
