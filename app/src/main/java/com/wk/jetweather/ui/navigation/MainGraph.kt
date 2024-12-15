@@ -86,15 +86,13 @@ fun NavGraphBuilder.bottomNavGraph(navHostController: NavHostController) {
             LaunchedEffect(key1 = isLocationEnabled, key2 = locationPermissionGranted) {
                 if (isLocationEnabled && locationPermissionGranted) {
                     currentWeatherScreenViewModel.fetchCurrentWeather()
-                } else {
-                    if (locationPermissionGranted && lastEnteredCityName.isEmpty()) {
-                        currentWeatherScreenViewModel.enableLocationRequest(context) {
-                            requestLocationPermissionLauncher.launch(it)
-                        }
-                    } else {
-                        currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(
-                            lastEnteredCityName
-                        )
+                } else if(lastEnteredCityName.isNotEmpty()) {
+                    currentWeatherScreenViewModel.fetchCurrentWeatherByCityName(
+                        lastEnteredCityName
+                    )
+                }else {
+                    currentWeatherScreenViewModel.enableLocationRequest(context) {
+                        requestLocationPermissionLauncher.launch(it)
                     }
                 }
             }
