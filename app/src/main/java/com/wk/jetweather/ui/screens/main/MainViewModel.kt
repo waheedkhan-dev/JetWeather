@@ -6,6 +6,7 @@ import com.wk.jetweather.ui.screens.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -16,21 +17,33 @@ class MainViewModel @Inject constructor(private val jetWeatherDataStoreRepo: Dat
     BaseViewModel() {
 
     private val _isInitialLaunch = MutableStateFlow<Boolean?>(null)
-    val isInitialLaunch: StateFlow<Boolean?> get() = _isInitialLaunch
+    val isInitialLaunch: StateFlow<Boolean?> = _isInitialLaunch.asStateFlow()
 
     private val _showCityNameDialog = MutableStateFlow(false)
-    val showCityNameDialog: StateFlow<Boolean> = _showCityNameDialog
+    val showCityNameDialog: StateFlow<Boolean> = _showCityNameDialog.asStateFlow()
+
+    private val _lastEnteredCityName =
+        MutableStateFlow(runBlocking { jetWeatherDataStoreRepo.getLastEnteredCityName().first() })
+    val lastEnteredCityName: StateFlow<String> = _lastEnteredCityName.asStateFlow()
 
 
     init {
         checkInitialLaunch()
     }
 
-    private fun checkInitialLaunch() {
+   private fun checkInitialLaunch() {
         viewModelScope.launch {
+
             jetWeatherDataStoreRepo.isInitialLaunch().collect { value ->
                 _isInitialLaunch.value = value
             }
+        }
+
+        viewModelScope.launch {
+            jetWeatherDataStoreRepo.getLastEnteredCityName()
+                .collect { value ->
+                    _lastEnteredCityName.value = value
+                }
         }
     }
 
