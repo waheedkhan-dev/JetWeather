@@ -4,14 +4,15 @@ plugins {
     alias(libs.plugins.hiltAndroid)
     alias(libs.plugins.androidRoom)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
-    namespace = "com.wk.jetweather"
+    namespace = "com.wk.weatherwise"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.wk.jetweather"
+        applicationId = "com.wk.weatherwise"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -71,6 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.play.services.location)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
@@ -119,6 +121,8 @@ dependencies {
 
     //Coil for image loading
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
+
 
     //DataStore
     implementation(libs.androidx.datastore.preferences)

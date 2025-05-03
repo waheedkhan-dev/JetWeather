@@ -1,0 +1,42 @@
+package com.wk.weatherwise.di
+
+import android.content.Context
+import androidx.room.Room
+import com.wk.weatherwise.data.datasource.local.dao.ForecastDao
+import com.wk.weatherwise.data.datasource.local.dao.WeatherDao
+import com.wk.weatherwise.data.datasource.local.database.JetWeatherAppDatabase
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object DatabaseModule {
+
+    @Singleton
+    @Provides
+    fun provideJetWeatherAppDb(@ApplicationContext context: Context): JetWeatherAppDatabase {
+        return Room.databaseBuilder(
+            context, JetWeatherAppDatabase::class.java,
+            JetWeatherAppDatabase.DATABASE_NAME
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideForecastDao(jetWeatherAppDatabase: JetWeatherAppDatabase): ForecastDao {
+        return jetWeatherAppDatabase.forecastDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCurrentWeatherDao(jetWeatherAppDatabase: JetWeatherAppDatabase): WeatherDao {
+        return jetWeatherAppDatabase.weatherDao()
+    }
+
+}
